@@ -10,6 +10,7 @@ userRouter.post('/api/users/refresh-token', userController.refreshToken);
 
 userRouter.use(verifyToken);
 userRouter.get('/api/users/profile', userController.profile);
+userRouter.delete('/api/users/logout', userController.logout);
 
 export {
     userRouter

@@ -55,9 +55,25 @@ const refreshToken = async (req, res, next) => {
     }
 }
 
+const logout = async (req, res, next) => {
+    
+    try {
+        const username = req.user.username;
+        await userService.logout(username);
+        res.clearCookie('refreshToken')
+
+        res.status(200).json({
+            message: "User has been logged out"
+        });
+    } catch (error) {
+        next(error)
+    }
+}
+
 export default {
     register,
     login,
     profile,
     refreshToken,
+    logout,
 }

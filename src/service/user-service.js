@@ -48,8 +48,8 @@ const findByUsername = async (username) => {
 }
 
 const jwtSign = (username, email, name) => {
-    const accessToken = jwt.sign({username, name, email}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '2h'});
-    const refreshToken = jwt.sign({ username, name, email }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d'});
+    const accessToken = jwt.sign({username, name, email}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_LIFE});
+    const refreshToken = jwt.sign({ username, name, email }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_LIFE});
 
     return { accessToken, refreshToken }
 }
@@ -92,13 +92,13 @@ const refreshToken = async (refreshToken) => {
     });
 
     if (!user) {
-        throw new ResponseError(403, 'Forbidden');
+        throw new ResponseError(401, 'Unauthorized');
     }
 
     let accessToken;
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
         if (err) {
-            throw new ResponseError(403, 'Forbidden');
+            throw new ResponseError(401, 'Unauthorized');
         }
         const tokens = jwtSign(user.username, user.email, user.name);
         accessToken = tokens.accessToken;
@@ -107,9 +107,25 @@ const refreshToken = async (refreshToken) => {
     return accessToken;
 }
 
+const logout = async (username) => {
+    return prisma.user.update({
+        where: {
+            username: username
+        },
+        data: {
+            refresh_token: ''
+        },
+        select: {
+            username: true
+        }
+    });
+}
+
+
 export default {
     create,
     findByUsername,
     createTokens,
-    refreshToken
+    refreshToken,
+    logout,
 }

@@ -86,3 +86,15 @@ response 200:
   }
 }
 ```
+
+### logout
+POST /api/users/logout
+
+AuthorizationL Bearer
+
+response 200:
+```json
+{
+  "message": "User has been logged out"
+}
+```
