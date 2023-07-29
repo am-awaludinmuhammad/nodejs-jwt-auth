@@ -88,9 +88,9 @@ response 200:
 ```
 
 ### logout
-POST /api/users/logout
+DELETE /api/users/logout
 
-AuthorizationL Bearer
+Authorization: Bearer
 
 response 200:
 ```json
