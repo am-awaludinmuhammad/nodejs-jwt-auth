@@ -70,10 +70,21 @@ const logout = async (req, res, next) => {
     }
 }
 
+const uploadAvatar = async (req, res, next) => {
+    try {
+        res.status(200).json({
+            message: "Avatar has been uploaded"
+        });
+    } catch (error) {
+        next(error)
+    }
+}
+
 export default {
     register,
     login,
     profile,
     refreshToken,
     logout,
+    uploadAvatar
 }
