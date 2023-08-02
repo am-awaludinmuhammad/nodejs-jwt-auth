@@ -11,9 +11,14 @@ const createUserSchema = Joi.object({
 const loginSchema = Joi.object({
     username: Joi.string().max(200).required(),
     password: Joi.string().max(200).required(),
-})
+});
+
+const updateUserSchema = Joi.object({
+    avatar: Joi.string().optional()
+});
 
 export {
     createUserSchema,
     loginSchema,
+    updateUserSchema,
 }

@@ -3,14 +3,14 @@ import multer from "multer";
 const multerSetup = () => {
     const storage = multer.diskStorage({
         destination: (req, file, cb) => {
-            cb(null, "images");
+            cb(null, "images/avatar");
         },
         filename: (req, file, cb) => {
-            cb(null, file.originalname);
+            cb(null, `${Date.now()}_${file.originalname}`);
         },
     });
 
-      return storage;
+    return storage;
 }
 
 const uploadImage = {

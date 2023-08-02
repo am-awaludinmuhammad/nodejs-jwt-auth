@@ -1,10 +1,10 @@
 import { prisma } from "../application/database.js";
 import { validate } from "../validation/validation.js";
-import { createUserSchema, loginSchema } from "../validation/user-validation.js";
+import { createUserSchema, loginSchema, updateUserSchema } from "../validation/user-validation.js";
 import bcrypt from "bcrypt";
 import { ResponseError } from "../error/response-error.js";
 import jwt from "jsonwebtoken";
-
+import fs from "fs";
 
 const create = async (params) => {
     const reqBody = validate(createUserSchema, params);
@@ -121,6 +121,26 @@ const logout = async (username) => {
     });
 }
 
+const update = async (username, params) => {
+    const reqBody = validate(updateUserSchema, params)
+    const data = {};
+    const user = await findByUsername(username);
+
+    if (reqBody.avatar) {
+        if (user.avatar) {
+            fs.unlink(`images/avatar/${user.avatar}`, (err) => {});
+        }
+
+        data.avatar = reqBody.avatar;
+    }
+
+    return prisma.user.update({
+        where: {
+            username: username
+        },
+        data: data
+    });
+}
 
 export default {
     create,
@@ -128,4 +148,5 @@ export default {
     createTokens,
     refreshToken,
     logout,
+    update,
 }

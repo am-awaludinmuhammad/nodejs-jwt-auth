@@ -19,6 +19,7 @@ model User {
   refresh_token String?  @db.LongText()
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
+  avatar        String?  @db.VarChar(255)
 
   @@map("users")
 }

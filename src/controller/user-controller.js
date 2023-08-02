@@ -72,6 +72,10 @@ const logout = async (req, res, next) => {
 
 const uploadAvatar = async (req, res, next) => {
     try {
+        await userService.update(req.user.username, {
+            avatar: req.file.filename
+        });
+
         res.status(200).json({
             message: "Avatar has been uploaded"
         });
